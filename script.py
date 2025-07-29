@@ -25,11 +25,14 @@ segmentoB = gpxB.tracks[0].segments[0]
 # Iteramos cada punto del nuevo track `pointB`
 # Por cada punto, recorremos todas las rutas del track original para ver si es un punto repetido
 # Si esta repetido, lo marcamos con elevacion igual a -1
+lenght_segmentoA = len(segmentoA.points)
 for pointB in segmentoB.points:
-    for i in range(len(segmentoA.points) - 1):
+    i = 0
+    while(i < (lenght_segmentoA - 1)):
         if (sameTrack.sameTrack(segmentoA.points[i], segmentoA.points[i+1], pointB)):
             pointB.elevation = -1
             break
+        i += 1
 
 # Dividir el nuevo track en los segmentos no repetidos
 # Recorre el nuevo track marcado con elevacion a -1 y 
