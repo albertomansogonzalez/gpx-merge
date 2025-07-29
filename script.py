@@ -48,10 +48,10 @@ for pointB in segmentoB.points:
 if nuevo_segmento: # si no esta vacio
     lista_segmentos.append(nuevo_segmento)
 
-# dejamos solo en el fichero los segmentos no repetidos
-gpxB.tracks[0].segments = lista_segmentos
+# Al track original `gpxA` añadimos los nuevos segmentos del Track nuevo `gpxB`
+gpxA.tracks[0].segments.extend(lista_segmentos)
 
 with open('nuevo.gpx', 'w') as f:
-    f.write(gpxB.to_xml())
+    f.write(gpxA.to_xml())
 
 
