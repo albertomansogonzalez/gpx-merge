@@ -1,12 +1,13 @@
 """
-Genera un fichero que es la nueva actividad que se quiere añadir, en la que estan marcados los puntos
-considerador repetidos con una elevacion de -1. Todavia no se unen al track original
+Genera un fichero que es la nueva actividad que se quiere añadir, separando en segmentos
+ y solo los no repetidos. Todavia no se unen al track original
 """
 import gpxpy
+import gpxpy.gpx
 import sameTrack
 
-track_original = 'MAL_fuente_teja.gpx' # track grande al que queremos añadir
-track_nuevo = 'Cerro_Batallones.gpx' # nuevo track que queremos incluir en el grande, (solo los caminos no repetidos)
+track_original = 'Cerro_Batallones.gpx' # track grande al que queremos añadir
+track_nuevo = 'MAL_fuente_teja.gpx' # nuevo track que queremos incluir en el grande, (solo los caminos no repetidos)
 
 
 # Track original
@@ -29,7 +30,27 @@ for pointB in segmentoB.points:
         if (sameTrack.sameTrack(segmentoA.points[i], segmentoA.points[i+1], pointB)):
             pointB.elevation = -1
             break
-    
+
+# Dividir el nuevo track en los segmentos no repetidos
+# Recorre el nuevo track marcado con elevacion a -1 y 
+# cuando encuentra un punto repetido añade el segmento
+# TODO se podria unificar con el bucle anterior
+lista_segmentos = [] # contendra las divisiones del nuevo track (solo las partes nuevas respecto al track original)
+nuevo_segmento = gpxpy.gpx.GPXTrackSegment() # contiene la lista de puntos de cada segmento que se va conformando
+for pointB in segmentoB.points:
+    if pointB.elevation != -1:
+        nuevo_segmento.points.append(pointB)
+    elif nuevo_segmento: # si no esta vacio
+        lista_segmentos.append(nuevo_segmento)
+        nuevo_segmento = gpxpy.gpx.GPXTrackSegment()
+
+# agregar el ultimo `nuevo_segmento` si no ha terminado en no repetidos
+if nuevo_segmento: # si no esta vacio
+    lista_segmentos.append(nuevo_segmento)
+
+# dejamos solo en el fichero los segmentos no repetidos
+gpxB.tracks[0].segments = lista_segmentos
+
 with open('nuevo.gpx', 'w') as f:
     f.write(gpxB.to_xml())
 
