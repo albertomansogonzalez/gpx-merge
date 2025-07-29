@@ -6,8 +6,8 @@ import gpxpy
 import gpxpy.gpx
 import sameTrack
 
-track_original = 'Cerro_Batallones.gpx' # track grande al que queremos añadir
-track_nuevo = 'MAL_fuente_teja.gpx' # nuevo track que queremos incluir en el grande, (solo los caminos no repetidos)
+track_original = 'Ruta1.gpx' # track grande al que queremos añadir
+track_nuevo = 'Ruta2.gpx' # nuevo track que queremos incluir en el grande, (solo los caminos no repetidos)
 
 
 # Track original
@@ -31,16 +31,35 @@ for pointB in segmentoB.points:
     inicio_indice = i - 3 # indice en el que se encontro la ultima colision con el track original, retrocedemos el indice buscador por si acaso
     if (inicio_indice < 0): inicio_indice = 0
     i = inicio_indice
+
+    # Se hace un bucle para buscar un punto coincidente en todo el track original
+    # iteramos desde la posicion `incide_inicio` hasta el final del camino + desde el principio hasta otra vez el inicio
+    # (como un recorrido en algebra modular)
     while True:
-        # primero mira si el punto esta relativamente cerca
-        if (abs(segmentoA.points[i].latitude - pointB.latitude) < 0.001) and (abs(segmentoA.points[i].longitude - pointB.longitude) < 0.001):
-            # ahora calcula con mas precision si el punto pertenece al segmento
+        i_prev = i # variable para ver si hemos vuelto al inicio del indice
+
+        # calculamos una aproximacion de la distancia, para skipear punto de manera proporcional
+        distancia_latitude = abs(segmentoA.points[i].latitude - pointB.latitude)
+        distancia_longitude = abs(segmentoA.points[i].longitude - pointB.longitude)
+        if (distancia_latitude > 0.002) or (distancia_longitude > 0.002): # si el punto esta muy lejano (200m aprox), podemos skipear algunos puntos
+            i += int((distancia_latitude + distancia_latitude) * 1000) # se saltan puntos en proporcion a la distancia con un factor
+        else: # el punto si esta cerca
+            # calcula si el punto pertenece al segmento
             if (sameTrack.sameTrack(segmentoA.points[i], segmentoA.points[i+1], pointB)):
                 pointB.elevation = -1
                 break
+        # avanzamos al siguiente punto
         i += 1
         if i >= (lenght_segmentoA - 1): i = 0 # para el desbordamiento del indice
-        if i == inicio_indice: break # ya hemos vuelvo al indice de inicio
+
+        # comprobacion en algebra modular, si ya hemos vuelto al inicio del indice
+        if (i_prev < i): # sin envolvimiento
+            if (i_prev < inicio_indice <= i):
+                break
+        else: #con envolvimiento
+            if (inicio_indice >= i_prev or inicio_indice <= i):
+                break
+
 
 # Dividir el nuevo track en los segmentos no repetidos
 # Recorre el nuevo track marcado con elevacion a -1 y 
