@@ -29,9 +29,12 @@ lenght_segmentoA = len(segmentoA.points)
 for pointB in segmentoB.points:
     i = 0
     while(i < (lenght_segmentoA - 1)):
-        if (sameTrack.sameTrack(segmentoA.points[i], segmentoA.points[i+1], pointB)):
-            pointB.elevation = -1
-            break
+        # primero mira si el punto esta relativamente cerca
+        if (abs(segmentoA.points[i].latitude - pointB.latitude) < 0.001) and (abs(segmentoA.points[i].longitude - pointB.longitude) < 0.001):
+            # ahora calcula con mas precision si el punto pertenece al segmento
+            if (sameTrack.sameTrack(segmentoA.points[i], segmentoA.points[i+1], pointB)):
+                pointB.elevation = -1
+                break
         i += 1
 
 # Dividir el nuevo track en los segmentos no repetidos
