@@ -26,9 +26,12 @@ segmentoB = gpxB.tracks[0].segments[0]
 # Por cada punto, recorremos todas las rutas del track original para ver si es un punto repetido
 # Si esta repetido, lo marcamos con elevacion igual a -1
 lenght_segmentoA = len(segmentoA.points)
+i = 0 # indice para recorrer los puntos del track original
 for pointB in segmentoB.points:
-    i = 0
-    while(i < (lenght_segmentoA - 1)):
+    inicio_indice = i - 3 # indice en el que se encontro la ultima colision con el track original, retrocedemos el indice buscador por si acaso
+    if (inicio_indice < 0): inicio_indice = 0
+    i = inicio_indice
+    while True:
         # primero mira si el punto esta relativamente cerca
         if (abs(segmentoA.points[i].latitude - pointB.latitude) < 0.001) and (abs(segmentoA.points[i].longitude - pointB.longitude) < 0.001):
             # ahora calcula con mas precision si el punto pertenece al segmento
@@ -36,6 +39,8 @@ for pointB in segmentoB.points:
                 pointB.elevation = -1
                 break
         i += 1
+        if i >= (lenght_segmentoA - 1): i = 0 # para el desbordamiento del indice
+        if i == inicio_indice: break # ya hemos vuelvo al indice de inicio
 
 # Dividir el nuevo track en los segmentos no repetidos
 # Recorre el nuevo track marcado con elevacion a -1 y 
