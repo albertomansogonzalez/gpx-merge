@@ -4,8 +4,20 @@ import gpxpy.gpx
 def sameTrack(A, B, P):
     # return si P pertenece al segmento entre A y B
 
-    # Comprobacion por contencion en el bounding box
-    # TODO no funciona bien del todo esta aproximacion
+    # Comprobacion por contencion en el bounding box, con un delta ampliado
+    delta = 0.00005
+    lat_min = min(A.latitude, B.latitude) - delta
+    lat_max = max(A.latitude, B.latitude) + delta
+    lon_min = min(A.longitude, B.longitude) - delta
+    lon_max = max(A.longitude, B.longitude) + delta
+
+    return (
+        (lat_min <= P.latitude <= lat_max)
+        and
+        (lon_min <= P.longitude <= lon_max)
+    )
+
+
     return (
         min(A.latitude, B.latitude) <= P.latitude <= max(A.latitude, B.latitude)
         and
@@ -58,4 +70,23 @@ if __name__ == "__main__":
         print("PASS")
     else:
         print("FAIL")
+
+    # Test case de puntos muy cercanos, pero fuera del bounding box
+    A = gpxpy.gpx.GPXWaypoint(latitude=40.227530, longitude=-3.708670)
+    B = gpxpy.gpx.GPXWaypoint(latitude=40.227590, longitude=-3.708616)
+    P = gpxpy.gpx.GPXWaypoint(latitude=40.227584, longitude=-3.708599)
+    if sameTrack(A,P,B):
+        print("PASS")
+    else:
+        print("FAIL")
+
+    A = gpxpy.gpx.GPXWaypoint(latitude=40.228522, longitude=-3.694337)
+    B = gpxpy.gpx.GPXWaypoint(latitude=40.228776, longitude=-3.694579)
+    P = gpxpy.gpx.GPXWaypoint(latitude=40.228803, longitude=-3.694259)
+    if not sameTrack(A,P,B):
+        print("PASS")
+    else:
+        print("FAIL")
+    
+    
 
