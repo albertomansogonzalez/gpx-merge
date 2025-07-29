@@ -1,6 +1,6 @@
 """
-Genera un fichero que es la nueva actividad que se quiere añadir, separando en segmentos
- y solo los no repetidos. Todavia no se unen al track original
+Genera un fichero formado por el track original mas el nuevo track
+separado en segmentos y solo los puntos no repetidos.
 """
 import gpxpy
 import gpxpy.gpx
