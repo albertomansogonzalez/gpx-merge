@@ -34,7 +34,7 @@ for pointB in segmentoB.points:
 
     # Se hace un bucle para buscar un punto coincidente en todo el track original
     # iteramos desde la posicion `incide_inicio` hasta el final del camino + desde el principio hasta otra vez el inicio
-    # (como un recorrido en algebra modular)
+    # (como un recorrido en aritmetica modular)
     while True:
         i_prev = i # variable para ver si hemos vuelto al inicio del indice
 
@@ -52,7 +52,7 @@ for pointB in segmentoB.points:
         i += 1
         if i >= (lenght_segmentoA - 1): i = 0 # para el desbordamiento del indice
 
-        # comprobacion en algebra modular, si ya hemos vuelto al inicio del indice
+        # comprobacion en aritmetica modular, si ya hemos vuelto al inicio del indice
         if (i_prev < i): # sin envolvimiento
             if (i_prev < inicio_indice <= i):
                 break
@@ -70,12 +70,12 @@ nuevo_segmento = gpxpy.gpx.GPXTrackSegment() # contiene la lista de puntos de ca
 for pointB in segmentoB.points:
     if pointB.elevation != -1:
         nuevo_segmento.points.append(pointB)
-    elif nuevo_segmento: # si no esta vacio
+    elif nuevo_segmento.get_points_no() > 0: # si no esta vacio
         lista_segmentos.append(nuevo_segmento)
         nuevo_segmento = gpxpy.gpx.GPXTrackSegment()
 
 # agregar el ultimo `nuevo_segmento` si no ha terminado en no repetidos
-if nuevo_segmento: # si no esta vacio
+if nuevo_segmento.get_points_no() > 0: # si no esta vacio
     lista_segmentos.append(nuevo_segmento)
 
 # Al track original `gpxA` añadimos los nuevos segmentos del Track nuevo `gpxB`
