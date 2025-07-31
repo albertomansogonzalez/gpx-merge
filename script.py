@@ -86,12 +86,12 @@ nuevo_segmento = gpxpy.gpx.GPXTrackSegment() # contiene la lista de puntos de ca
 for pointB in segmentoB.points:
     if pointB.elevation != -1:
         nuevo_segmento.points.append(pointB)
-    elif nuevo_segmento.get_points_no() > 0: # si no esta vacio
+    elif nuevo_segmento.get_points_no() >= 2: # si no esta vacio, y tiene al menos 2 puntos
         lista_segmentos.append(nuevo_segmento)
         nuevo_segmento = gpxpy.gpx.GPXTrackSegment()
 
 # agregar el ultimo `nuevo_segmento` si no ha terminado en no repetidos
-if nuevo_segmento.get_points_no() > 0: # si no esta vacio
+if nuevo_segmento.get_points_no() >= 2: # si no esta vacio, y tiene al menos 2 puntos
     lista_segmentos.append(nuevo_segmento)
 
 # Al track original `gpxA` añadimos los nuevos segmentos del Track nuevo `gpxB`
