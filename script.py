@@ -2,6 +2,7 @@
 Genera un fichero formado por el track original mas el nuevo track
 separado en segmentos y solo los puntos no repetidos.
 """
+import sys
 import gpxpy
 import gpxpy.gpx
 import sameTrack
@@ -11,12 +12,20 @@ track_nuevo = 'Bosque_Warner.gpx' # nuevo track que queremos incluir en el grand
 
 
 # Track original
-with open(track_original, 'r') as gpx_file:
-    gpxA = gpxpy.parse(gpx_file)
+try:
+    with open(track_original, 'r') as gpx_file:
+        gpxA = gpxpy.parse(gpx_file)
+except:
+    print("Error abriendo el fichero 1")
+    sys.exit(1)
 
-# Track con nueva ruta
-with open(track_nuevo, 'r') as gpx_file:
-    gpxB = gpxpy.parse(gpx_file)
+try:
+    # Track con nueva ruta
+    with open(track_nuevo, 'r') as gpx_file:
+        gpxB = gpxpy.parse(gpx_file)
+except:
+    print("Error abriendo el fichero 2")
+    sys.exit(2)
 
 # TODO de momento asumimos que el fichero nuevo solo tienen 1 track y un solo segmento
 segmentoB = gpxB.tracks[0].segments[0]
