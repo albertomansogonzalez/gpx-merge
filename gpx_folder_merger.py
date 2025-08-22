@@ -2,7 +2,7 @@ import gpxpy
 import gpxpy.gpx
 
 def sameTrack(A, B, P):
-    # return si P pertenece al segmento entre A y B
+    " return si P pertenece al segmento entre A y B "
 
     # Comprobacion por contencion en el bounding box, con un delta ampliado
     delta = 0.00005
@@ -15,13 +15,6 @@ def sameTrack(A, B, P):
         (lat_min <= P.latitude <= lat_max)
         and
         (lon_min <= P.longitude <= lon_max)
-    )
-
-
-    return (
-        min(A.latitude, B.latitude) <= P.latitude <= max(A.latitude, B.latitude)
-        and
-        min(A.longitude, B.longitude) <= P.longitude <= max(A.longitude, B.longitude)
     )
 
 
