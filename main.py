@@ -8,11 +8,11 @@ import glob
 import gpxpy
 from gpx_folder_merger import gpxMerger  
 
-data_dir = 'RUTAS BICI MADRID'
-track_original =os.path.join(data_dir,'ACEPTO_EL_DESAFIO_Cerro_de_los_Batallones_2024.gpx')
-pattern = 'Martín_de+Frutos*.gpx'
+data_dir = 'RUTAS'  # Directorio que contiene las rutas
+track_original = os.path.join(data_dir,'Abantos_Bici.gpx') # Ruta inicial a la que se la mergean los tracks
+pattern = '*.gpx' # Se añadiran todas estas rutas
 gpx_files = glob.glob(os.path.join(data_dir,pattern))
-merged_gpx_name = os.path.join(data_dir,'Merged_track.gpx') 
+merged_gpx_name = os.path.join(data_dir,'Merged_track.gpx')  # Nombre del nuevo fichero creado
 
 # Track original
 try:
@@ -29,7 +29,7 @@ for i, gpxFile in enumerate(gpx_files):
         # Track con nueva ruta
         with open(gpxFile, 'r') as gpx_file:
             print('Cargando la ruta : {}/{}'.format(i,len(gpx_files)))
-            gpxB = gpxpy.parse(gpxFile)
+            gpxB = gpxpy.parse(gpx_file)
     except:
         print("Error abriendo el fichero {}".format(gpxFile)) 
         sys.exit(2)
