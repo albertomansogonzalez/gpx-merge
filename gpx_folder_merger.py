@@ -92,6 +92,8 @@ def gpxMerger(gpxA,gpxB):
             elif nuevo_segmento.get_points_no() >= 2: # si no esta vacio, y tiene al menos 2 puntos
                 lista_segmentos.append(nuevo_segmento)
                 nuevo_segmento = gpxpy.gpx.GPXTrackSegment()
+            else:
+                nuevo_segmento = gpxpy.gpx.GPXTrackSegment()
     
         # agregar el ultimo `nuevo_segmento` si no ha terminado en no repetidos
         if nuevo_segmento.get_points_no() >= 2: # si no esta vacio, y tiene al menos 2 puntos

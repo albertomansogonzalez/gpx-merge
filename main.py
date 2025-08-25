@@ -28,7 +28,7 @@ for i, gpxFile in enumerate(gpx_files):
     try:
         # Track con nueva ruta
         with open(gpxFile, 'r') as gpx_file:
-            print('Cargando la ruta : {}/{}'.format(i,len(gpx_files)))
+            print('Cargando la ruta : {}/{}'.format(i+1,len(gpx_files)))
             gpxB = gpxpy.parse(gpx_file)
     except:
         print("Error abriendo el fichero {}".format(gpxFile)) 
